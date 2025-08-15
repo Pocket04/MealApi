@@ -26,13 +26,11 @@ public class Api {
         return "Sorry, no recipes";
     }
     public static String requestMealsList(String endpoint){
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://www.themealdb.com/api/json/v1/1/filter.php?i=" + endpoint)).GET().build();
 
         try{
-            HttpClient client = HttpClient.newHttpClient();
-
-            HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://www.themealdb.com/api/json/v1/1/filter.php?i=" + endpoint)).GET().build();
-            System.out.println("https://www.themealdb.com/api/json/v1/1/filter.php?i=" + endpoint);
-
             HttpResponse<String> res = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             return res.body();
@@ -41,6 +39,22 @@ public class Api {
             System.out.println("Exception: " + e);
         }
         return "naw m8";
+    }
+
+    public static String requestSpecificMealById(int id) {
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + id)).build();
+        try{
+            HttpResponse<String> res = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return res.body();
+        }catch (Exception e){
+            System.out.println("Sorry, exception.");
+
+        }
+
+        return "Sorry, couldn't find it.";
     }
 
 }
